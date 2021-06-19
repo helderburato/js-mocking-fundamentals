@@ -1,9 +1,3 @@
-/**
- * Task: refactor the code to mock the entire module.
- *
- * Execute: Use `npx jest --watch src/no-framework/inline-module-mock.js` to watch the test
- */
-
 function fn(impl = () => {}) {
   const mockFn = (...args) => {
     mockFn.mock.calls.push(args)
@@ -11,6 +5,16 @@ function fn(impl = () => {}) {
   }
   mockFn.mock = {calls: []}
   return mockFn
+}
+
+const utilsPath = require.resolve('../utils')
+require.cache[utilsPath] = {
+  id: utilsPath,
+  filename: utilsPath,
+  loaded: true,
+  exports: {
+    getWinner: fn((p1, _p2) => p1)
+  }
 }
 
 const assert = require('assert')
@@ -25,10 +29,4 @@ assert.deepStrictEqual(utils.getWinner.mock.calls, [
 ])
 
 // cleanup
-
-/**
- * Hints:
- * - https://nodejs.org/api/modules.html#modules_caching
- *
- * Checkout master branch to see the answer.
- */
+delete require.cache[utilsPath]
