@@ -12,19 +12,27 @@ const utils = require('../utils')
 
 // Your Code:
 
-const originalGetWinner = utils.getWinner
-utils.getWinner = fn((p1, p2) => p1)
+// Receive implementation as parameter
+function fn(impl) {
+  // pass arguments to the mockFn()
+  const mockFn = (...args) => {
+    // count calls with the args
+    mockFn.mock.calls.push(args)
+    return impl(...args)
+  }
+  mockFn.mock = {calls: []}
+  return mockFn
+}
 
-const winner = thumbWar('Kent C. Dodds', 'Ken Wheeler')
-assert.strictEqual(winner, 'Kent C. Dodds')
+const originalGetWinner = utils.getWinner
+utils.getWinner = fn((p1, _p2) => p1)
+
+const winner = thumbWar('Helder', 'Paula')
+assert.strictEqual(winner, 'Helder')
 assert.deepStrictEqual(utils.getWinner.mock.calls, [
-  ['Kent C. Dodds', 'Ken Wheeler'],
-  ['Kent C. Dodds', 'Ken Wheeler'],
+  ['Helder', 'Paula'],
+  ['Helder', 'Paula']
 ])
 
 // cleanup
 utils.getWinner = originalGetWinner
-
-/**
- * Checkout master branch to see the answer.
- */
