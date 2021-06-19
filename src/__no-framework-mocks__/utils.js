@@ -8,5 +8,5 @@ function fn(impl = () => {}) {
 }
 
 module.exports = {
-  getWinner: fn((p1, p2) => p1)
+  getWinner: fn((p1, _p2) => p1)
 }
