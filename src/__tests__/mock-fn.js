@@ -19,11 +19,23 @@ const utils = require('../utils')
 
 test('returns winner', () => {
   const originalGetWinner = utils.getWinner
-  utils.getWinner = jest.fn((p1, p2) => p1)
+  utils.getWinner = jest.fn((p1, _p2) => p1)
 
-  const winner = thumbWar('Kent C. Dodds', 'Ken Wheeler')
-  expect(winner).toBe('Kent C. Dodds')
+  const winner = thumbWar('Helder', 'Paula')
+  expect(winner).toBe('Helder')
   // Your code:
+  console.log(utils.getWinner.mock.calls); // => [ [ 'Helder', 'Paula' ], [ 'Helder', 'Paula' ] ]
+
+  expect(utils.getWinner.mock.calls).toEqual([
+    ['Helder', 'Paula'],
+    ['Helder', 'Paula'],
+  ])
+
+  // The following validations is the same as check utils.getWinner.mock.calls
+  // expect(utils.getWinner).toHaveBeenCalledTimes(2)
+  // expect(utils.getWinner).toHaveBeenCalledWith('Helder', 'Paula')
+  // expect(utils.getWinner).toHaveBeenNthCalledWith(1, 'Helder', 'Paula')
+  // expect(utils.getWinner).toHaveBeenNthCalledWith(2, 'Helder', 'Paula')
 
   // cleanup
   utils.getWinner = originalGetWinner
